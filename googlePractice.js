@@ -7,17 +7,20 @@ var casper = require('casper').create({
     });
 
 var links = [];
+var text;
 
 function getLinks() {
     // var links = document.querySelectorAll('.g a');
-    // var links = document.querySelector('.kno-ecr-pt kno-fb-ctx span');
-    var text = this.evaluate(function(){
-        return document.querySelector('div.c94Vsf.Y1mqLe.kp-rgc span').innerHTML;
-    });
     // return Array.prototype.map.call(links, function(e) {
     //     return e.getAttribute('href');
     // });
-    // return links;
+    var text = document.querySelector('kno-ecr-pt.kno-fb-ctx span');
+
+    // console.log(text.innerHTML);
+    return text;
+    // return Array.prototype.map.call(links, function(e) {
+    //     return e.getAttribute('href');
+    // });
 };
 
 casper.start('http://www.google.com/', function() {
@@ -26,21 +29,24 @@ casper.start('http://www.google.com/', function() {
     }, true);
 });
 
-casper.run(function() {
-    console.log(this.evaluate(getLinks));
-    // links = this.evaluate(getLinks);
-    // casper.capture('goog.png');
+casper.then(function() {
+    text = this.evaluate(getLinks);
+    console.log(text.innerHTML);
+    casper.capture('goog.png');
 });
 
 // casper.thenClick('.g a');
 
-casper.then(function() {
-    casper.capture("goog2.png")
-})
+// casper.then(function() {
+//     casper.capture("goog2.png")
+// })
 
-// // run takes an optional on complete function
-// casper.run(function() {
-//     // echo results in a readable fashion
-//     // this.echo(links.length + 'links found');
-//     this.echo('-' + links/*.join('\n-')*/).exit();
-// });
+// run takes an optional on complete function
+casper.run(function() {
+    // echo results in a readable fashion
+    // this.echo(links.length + 'links found');
+    // this.echo('-' + links.join('\n-')).exit();
+
+    // this.echo('text: ' + Object.getOwnPropertyNames(text));
+    this.echo('text: ' + text.length);
+});
